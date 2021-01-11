@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tutorial: Hello Dojo!</title>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/resources/dojo.css">
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojox/grid/resources/claroGrid.css">
+</head>
+<body>
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="async: true"></script>
+
+
+<input type="number" name="priceProduct" value=""/></td>
+
+
+<div id="gridDiv"></div>
+<!-- load Dojo -->
+<p>
+  <span id='button2'>
+      Add Row
+  </span>
+
+    <span id='button1'>
+      Remove Selected Rows
+  </span>
+</p>
+
+<div id="selectTarget"></div>
+
+<input data-dojo-type="dijit.form.DateTextBox" id="formDate">
+
+<script>
+    require(['dojo/_base/array', "dijit/form/FilteringSelect", "dojo/store/Memory", "dojo/data/ObjectStore", 'dojo/_base/lang', 'dojo/_base/event', 'dojo/on', 'dojox/grid/DataGrid', 'dojox/grid/cells/dijit', 'dojo/data/ItemFileWriteStore', 'dojo/date/stamp', 'dojo/date/locale', 'dijit/form/Button', 'dojo/dom', 'dojo/parser', 'dojox/grid/_Scroller', 'dojo/domReady!'],
+        function (array, FilteringSelect, Memory, ObjectStore, lang, event, on, DataGrid, cells, ItemFileWriteStore, stamp, locale, Button, dom, parser, _Scroller) {
+
+            var stateStore = new Memory({
+                data: [
+                    {name: "", id: ""},
+                    {name: "Alabama", id: "AL"},
+                    {name: "Alaska", id: "AK"},
+                    {name: "American Samoa", id: "AS"},
+                    {name: "Arizona", id: "AZ"},
+                    {name: "Arkansas", id: "AR"}
+
+                ]
+            });
+            var filteringSelect = new FilteringSelect({
+                id: "selectTarget",
+                value: "AR",
+                store: stateStore,
+                searchAttr: "name"
+            }, "selectTarget");
+
+            filteringSelect.on("change", function () {
+                debugger;
+                alert("234");
+            });
+            var x = dijit.byId(selectTarget);
+            debugger;
+
+        });
+
+
+    require(['dojo/_base/array', 'dojo/_base/lang', 'dojo/_base/event', 'dojo/on', 'dojox/grid/DataGrid', 'dojox/grid/cells/dijit', 'dojo/data/ItemFileWriteStore', 'dojo/date/stamp', 'dojo/date/locale', 'dijit/form/Button', 'dojo/dom', 'dojo/parser', 'dojox/grid/_Scroller', 'dojo/domReady!'],
+        function (array, lang, event, on, DataGrid, cells, ItemFileWriteStore, stamp, locale, Button, dom, parser, _Scroller) {
+
+
+            /*set up data store*/
+            var data = {
+                identifier: "id",
+                items: []
+            };
+            var data_list = [
+                {
+                    MaGiayTo: "normal",
+                    LoaiGiayTo: false,
+                    OldRecord: '',
+                    TrangThai: 'But are not followed by two hexadecimal',
+                    SoLuong: 1,
+                    ngay: '',
+                    Mota1: ''
+                },
+                {
+                    MaGiayTo: "important",
+                    LoaiGiayTo: false,
+                    OldRecord: '',
+                    TrangThai: 'Because a % sign always indicates',
+                    SoLuong: 2,
+                    ngay: '',
+                    Mota1: ''
+                },
+                {
+                    MaGiayTo: "important",
+                    LoaiGiayTo: false,
+                    OldRecord: '',
+                    TrangThai: 'Signs can be selectively',
+                    SoLuong: 3,
+                    ngay: '',
+                    Mota1: ''
+                }
+
+            ];
+            var rows = 2;
+            for (var i = 0, l = data_list.length; i < rows; i++) {
+                data.items.push(lang.mixin({id: i + 1}, data_list[i % l]));
+            }
+
+            var store = new ItemFileWriteStore({data: data});
+
+            var formatDate = function (datum) {
+                var d = dojo.date.locale.parse(datum, {selector: 'date', datePattern: 'dd/MM/yyyy'});
+                if (d == null) {
+                    return "";
+                } else {
+                    return dojo.date.locale.format(d, {selector: 'date', datePattern: 'dd/MM/yyyy'});
+                }
+            }
+
+            var getDateValue = function () {
+                if (this.widget.get('value') == null)
+                    return '';
+                var x = locale.format(this.widget.get('value'), {selector: 'date', datePattern: 'dd/MM/yyyy'});
+                return x;
+            }
+            var formatInt = function (intVal) {
+                return intVal;
+            }
+            var getIntValue = function (val, index) {
+                if (grid.getItem(index).valid == "true") {
+                    return "<a href='#'>" + val + "<a/>";
+                } else {
+                    return val;
+                }
+
+            }
+
+
+            /*set up layout*/
+            var layout = [[
+                {'name': 'STT', 'field': 'id', 'width': '5%',},
+                {
+                    'name': 'Mã giấy tờ',
+                    'field': 'MaGiayTo',
+                    'width': '15%',
+                    editable: true,
+                    'cellType': 'dojox.grid.cells.Select',
+                    'options': ['Abc', 'edf']
+                },
+                {'name': 'Loại thấy giờ', 'field': 'LoaiGiayTo', 'width': '25%', editable: true,},
+                {'name': 'Trạng thái', 'field': 'TrangThai', 'width': '15%', editable: true},
+                {'name': 'OldRecord', 'field': 'OldRecord', 'width': '15%', editable: true},
+                {'name': 'Số lượng', 'field': 'SoLuong', 'width': '30%', editable: true, formatter: getIntValue},
+                {
+                    'name': 'Ngày',
+                    'field': 'ngay',
+                    'width': '30%',
+                    editable: true,
+                    "cellType": "dojox.grid.cells.DateTextBox",
+                    formatter: formatDate,
+                    getValue: getDateValue,
+                    constraint: {datePattern: "dd/MM/yyyy"}
+                }
+            ]];
+
+
+            /*create a new grid*/
+            var grid = new DataGrid({
+                id: 'grid',
+                store: store,
+                structure: layout,
+                rowSelector: '20px',
+                clientSort: false,
+                autoHeight: true,
+                scrollable: false,
+                keepSelection: true,
+                delayScroll: true,
+                scrollTop: false,
+                style: "overflow:auto",
+                nestedSorting: false,
+                noscroll: true
+
+            });
+            grid.on('MouseDown', function (event) {
+
+                event.cancelable = false;
+
+            });
+            /*append the new grid to the div*/
+            grid.placeAt("gridDiv");
+
+            /* attach an event handler */
+            on(button2, 'click',
+                function (e) {
+                    /* set the properties for the new item: */
+                    var myNewItem = {id: (++i), col1: "Mediate", col2: true, col3: 'Newly added values', col4: 8888};
+                    /* Insert the new item into the store:*/
+                    store.newItem(myNewItem);
+                }
+            );
+            /* attach an event handler */
+            on(button1, 'click',
+                function (e) {
+                    /* Get all selected items from the Grid: */
+                    var items = grid.selection.getSelected();
+                    if (items.length) {
+                        /* Iterate through the list of selected items.
+                           The current item is available in the variable
+                           "selectedItem" within the following function: */
+                        array.forEach(items, function (selectedItem) {
+                            if (selectedItem !== null) {
+                                /* Delete the item from the data store: */
+                                store.deleteItem(selectedItem);
+                            } /* end if */
+                        }); /* end forEach */
+                    } /* end if */
+                    event.stop(e);
+                }
+            );
+
+            /*Call startup() to render the grid*/
+            grid.startup();
+
+
+        });
+
+
+</script>
+<!--<style>-->
+<!--    #gridDiv {-->
+<!--        height: 20em;-->
+<!--    }-->
+<!--    .dojoxGridScrollbox{-->
+<!--        overflow: inherit !important;-->
+<!--    }-->
+<!--    #grid {-->
+<!--        height: auto;-->
+<!--    }-->
+<!--    #grid .dgrid-scroller {-->
+<!--        position: relative;-->
+<!--        overflow-y: hidden;-->
+<!--    }-->
+<!--    #grid .dgrid-header-scroll {-->
+<!--        display: none;-->
+<!--    }-->
+<!--    #grid .dgrid-header {-->
+<!--        right: 0;-->
+<!--    }-->
+<!--    #gridDiv .dojoxGridHiddenFocus{-->
+<!--        position: fixed !important;-->
+<!--    }-->
+<!--</style>-->
+</body>
+</html>
